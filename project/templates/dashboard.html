@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Prediction System</title>
+    
+    <!-- FontAwesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+
+    <style>
+        /* Full-page background */
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://graphen.ai/static/media/loan1.f1ce302619a924060fc6.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Align from top */
+            color: white;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        /* Title styling - top left */
+        .title {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Tagline styling (Adjusted Position) */
+        .tagline {
+            position: absolute;
+            top: 130px; /* Moved slightly lower */
+            left: 50px;
+            font-size: 20px;
+            font-weight: normal;
+            color: #f0f0f0;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Sign Up / Login Button - Lower on the page */
+        .btn-container {
+            position: absolute;
+            top: 250px; /* Lowered position */
+            left: 50px;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Icons */
+        .icons {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            gap: 20px;
+            font-size: 26px;
+        }
+
+        .icons a {
+            color: white;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .icons a:hover::after {
+            content: attr(data-title);
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        /* Loan Default Prediction Description */
+        .description {
+            position: absolute;
+            bottom: 50px;
+            left: 50px;
+            max-width: 500px;
+            font-size: 18px;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .description i {
+            font-size: 30px;
+            color: #f0a500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Icons Section -->
+    <div class="icons">
+        <a href="#" data-title="Home"><i class="fas fa-home"></i></a>
+        <a href="#" data-title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="#" data-title="Contact"><i class="fas fa-user"></i></a>
+    </div>
+
+    <!-- Title at the top left -->
+    <h1 class="title">Loan Prediction System</h1>
+    
+    <!-- Tagline positioned slightly lower -->
+    <p class="tagline">The system allows users to easily input loan details and receive instant predictions.</p>
+
+    <!-- Buttons positioned lower -->
+    <div class="btn-container">
+        <a href="signup.html" class="btn">
+            <i class="fas fa-sign-in-alt"></i> Sign Up / Login
+        </a>
+        <br>
+        <a href="index.html" class="btn">
+            <i class="fas fa-chart-line"></i> Loan Prediction Form
+        </a>
+    </div>
+
+    <!-- Loan Default Prediction Description -->
+    <div class="description">
+        <i class="fas fa-coins"></i>
+        <p>Our <strong>Loan Default Prediction System</strong> helps banks assess a borrower's eligibility by analyzing key financial and personal details. By evaluating factors such as <strong>income, credit history, loan amount, and employment status</strong>, the system provides a quick and reliable prediction, enabling lenders to make informed and risk-free loan approval decisions.</p>
+    </div>
+
+</body>
+</html>

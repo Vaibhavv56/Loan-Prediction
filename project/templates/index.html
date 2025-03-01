@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Default Prediction</title>
+  <style>
+    /* Reset and Universal Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px 50px;
+      width: 100%;
+      max-width: 1200px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .container:hover {
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    h1 {
+      font-size:  2.8rem;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    /* Progress Bar */
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .step {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      background-color: #ddd;
+      color: #333;
+      border-radius: 50%;
+      font-size: 1.4rem;
+      font-weight: bold;
+      position: relative;
+      transition: background-color 0.3s ease;
+    }
+
+    .step.completed {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .step.active {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .step.completed::before {
+      content: '\2713'; /* Unicode checkmark */
+      font-size: 1.6rem;
+      position: absolute;
+    }
+
+    .line {
+      height: 3px;
+      width: 100%;
+      background-color: #ddd;
+      position: relative;
+      top: -10px;
+      z-index: -1;
+    }
+
+    .line.active {
+      background-color: #2196F3;
+    }
+
+    /* Form Styles */
+    .section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      width: 48%;
+      margin-bottom: 20px;
+    }
+
+    .input-group label {
+      font-size: 1.2rem;
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background-color: #f0f0f0;
+      margin-bottom: 12px;
+      color: #333;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      border-color: #2196F3;
+      background-color: #fff;
+      box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    }
+
+    button {
+      background-color: #ff6b6b;
+      border: none;
+      padding: 15px 30px;
+      color: #ffffff;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #e63946;
+    }
+
+    #result {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #4CAF50;
+      margin-top: 30px;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      .section .input-group {
+        width: 100%;
+      }
+
+      .steps {
+        flex-direction: column;
+      }
+
+      .step {
+        margin-bottom: 12px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Animated Effects */
+    .input-group input,
+    .input-group select {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    button {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Loan Default Prediction</h1>
+
+    <!-- Progress Bar -->
+    <div class="line" id="progressLine"></div>
+    <div class="steps">
+      <div class="step active" id="step1">1</div>
+      <div class="step" id="step2">2</div>
+      <div class="step" id="step3">3</div>
+      <div class="step" id="step4">4</div>
+    </div>
+
+    <form action="http://127.0.0.1:5000/predict" method="post" id="predictionForm">
+      <div class="section">
+        <div class="input-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" placeholder="Enter your age" oninput="updateStep(1)" required>
+        </div>
+        <div class="input-group">
+          <label for="income">Annual Income</label>
+          <input type="number" id="income" name="income" placeholder="Enter your income" oninput="updateStep(1)" required>
+        </div>
+        <div class="input-group">
+          <label for="loanAmount">Loan Amount</label>
+          <input type="number" id="loanAmount" name="loanAmount" placeholder="Enter loan amount" oninput="updateStep(1)" required>
+        </div>
+        <div class="input-group">
+          <label for="creditScore">Credit Score</label>
+          <input type="number" id="creditScore" name="creditScore" placeholder="Enter your credit score" oninput="updateStep(1)" required>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="input-group">
+          <label for="monthsEmployed">Months Employed</label>
+          <input type="number" id="monthsEmployed" name="monthsEmployed" placeholder="Enter months employed" oninput="updateStep(2)" required>
+        </div>
+        <div class="input-group">
+          <label for="numCreditLines">Number of Credit Lines</label>
+          <input type="number" id="numCreditLines" name="numCreditLines" placeholder="Enter number of credit lines" oninput="updateStep(2)" required>
+        </div>
+        <div class="input-group">
+          <label for="interestRate">Interest Rate (%)</label>
+          <input type="number" id="interestRate" name="interestRate" placeholder="Enter interest rate" oninput="updateStep(2)" required>
+        </div>
+        <div class="input-group">
+          <label for="loanTerm">Loan Term (months)</label>
+          <input type="number" id="loanTerm" name="loanTerm" placeholder="Enter loan term" oninput="updateStep(2)" required>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="input-group">
+          <label for="dtiRatio">DTI Ratio (%)</label>
+          <input type="number" id="dtiRatio" name="dtiRatio" placeholder="Enter DTI ratio" oninput="updateStep(3)" required>
+        </div>
+        <div class="input-group">
+          <label for="education">Education</label>
+          <select id="education" name="education" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="highschool">High School</option>
+            <option value="bachelor">Bachelor's</option>
+            <option value="masters">Master's</option>
+            <option value="phd">Ph.D.</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="employmentType">Employment Type</label>
+          <select id="employmentType" name="employmentType" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="fulltime">Full-Time</option>
+            <option value="parttime">Part-Time</option>
+            <option value="freelance">Freelance</option>
+            <option value="contract">Contract</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="maritalStatus">Marital Status</label>
+          <select id="maritalStatus" name="maritalStatus" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
+            <option value="widowed">Widowed</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="input-group">
+          <label for="hasMortgage">Has Mortgage</label>
+          <select id="hasMortgage" name="hasMortgage" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="hasDependents">Has Dependents</label>
+          <select id="hasDependents" name="hasDependents" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="loanPurpose">Loan Purpose</label>
+          <select id="loanPurpose" name="loanPurpose" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="education">Education</option>
+            <option value="home">Home</option>
+            <option value="car">Car</option>
+            <option value="medical">Medical</option>
+            <option value="business">Business</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="hasCosigner">Has Cosigner</label>
+          <select id="hasCosigner" name="hasCosigner" oninput="updateStep(3)" required>
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="result">
+      {% if message %}
+          <p>{{ message }}</p>
+      {% endif %}
+      
+      {% if prediction %}
+          <h2>Prediction: {{ prediction }}</h2>
+      {% endif %}
+    </p>
+  </div>
+
+  <script>
+    let currentStep = 1;
+
+    // Updates the progress steps dynamically
+    function updateStep(step) {
+      if (step > currentStep) {
+        currentStep = step;
+      }
+
+      for (let i = 1; i <= 4; i++) {
+        let stepElement = document.getElementById('step' + i);
+        let lineElement = document.querySelector('.line');
+
+        if (i <= currentStep) {
+          stepElement.classList.add('completed');
+          if (i < currentStep) {
+            lineElement.classList.add('active');
+          }
+        } else {
+          stepElement.classList.remove('completed');
+        }
+      }
+    }
+
+
+ 
+  </script>
+</body>
+</html>
